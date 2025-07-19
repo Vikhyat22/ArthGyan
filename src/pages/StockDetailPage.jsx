@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { useWatchlist } from '../contexts/WatchlistContext';
 import MainStockChart from '../components/charts/MainStockChart';
 import AnnouncementCard from '../components/shared/AnnouncementCard';
-import { getAllStocks } from '../services/api'; // Fetch data from the service
+import { getAllStocks } from '../services/api';
 
 const StockDetailPage = () => {
   const { ticker } = useParams();
   const [stock, setStock] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const { watchlist, addStock, removeStock } = useWatchlist();
+  const isFollowed = stock ? watchlist.includes(stock.ticker.toUpperCase()) : false;
 
   useEffect(() => {
     const fetchStockData = async () => {
@@ -20,15 +24,22 @@ const StockDetailPage = () => {
     };
 
     fetchStockData();
-  }, [ticker]); // Re-run this effect if the ticker in the URL changes
+  }, [ticker]);
 
-  const handleFollow = () => {
+  const handleToggleFollow = () => {
     if (!stock) return;
-    toast.success(`Following ${stock.name}!`);
+    const stockTicker = stock.ticker.toUpperCase();
+    if (isFollowed) {
+      removeStock(stockTicker);
+      toast.error(`Unfollowed ${stock.name}`);
+    } else {
+      addStock(stockTicker);
+      toast.success(`Following ${stock.name}!`);
+    }
   };
 
   if (isLoading) {
-    return <p className="text-gray-400">Loading stock details...</p>; // Or a skeleton loader
+    return <p className="text-gray-400">Loading stock details...</p>;
   }
 
   if (!stock) {
@@ -50,10 +61,14 @@ const StockDetailPage = () => {
           <p className="text-gray-400">NSE: {stock.ticker}</p>
         </div>
         <button
-          onClick={handleFollow}
-          className="bg-blue-600 text-white font-semibold rounded-md px-4 py-2 hover:bg-blue-700"
+          onClick={handleToggleFollow}
+          className={`font-semibold rounded-md px-4 py-2 transition-colors ${
+            isFollowed
+              ? 'bg-gray-700 text-gray-300 hover:bg-red-800/50 hover:text-red-400'
+              : 'bg-blue-600 text-white hover:bg-blue-700'
+          }`}
         >
-          Follow
+          {isFollowed ? 'Following' : 'Follow'}
         </button>
       </div>
 
@@ -69,7 +84,6 @@ const StockDetailPage = () => {
             </div>
           </div>
         </div>
-
         <div className="space-y-6">
           <div className="bg-[#161b22] border border-[#30363d] rounded-lg p-4">
             <h3 className="text-lg font-bold text-white mb-4">About</h3>
