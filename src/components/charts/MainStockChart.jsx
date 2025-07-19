@@ -7,13 +7,13 @@ import {
   LinearScale,
   Tooltip,
   Legend,
-  TimeScale, // This was the missing  and not found
-  TimeSeriesScale, // This was the missing import
+  TimeScale,
+  TimeSeriesScale,
 } from 'chart.js';
 import { CandlestickController, CandlestickElement } from 'chartjs-chart-financial';
 import 'chartjs-adapter-date-fns';
 
-// Register all the necessary components for Chart.js, including the time scales
+// Register all the necessary components for Chart.js
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -21,11 +21,11 @@ ChartJS.register(
   Legend,
   CandlestickController,
   CandlestickElement,
-  TimeScale, // This was the missing registration
-  TimeSeriesScale // This was the missing registration
+  TimeScale,
+  TimeSeriesScale
 );
 
-// Placeholder data in OHLC format (Open, High, Low, Close)
+// Create new placeholder data in OHLC format (Open, High, Low, Close)
 const ohlcData = [
   { x: new Date('2025-07-01').valueOf(), o: 100, h: 105, l: 98, c: 102 },
   { x: new Date('2025-07-02').valueOf(), o: 102, h: 108, l: 101, c: 107 },
@@ -49,7 +49,7 @@ const MainStockChart = () => {
     maintainAspectRatio: false,
     scales: {
       x: {
-        type: 'time', // This requires the TimeScale to be registered
+        type: 'time',
         time: {
           unit: 'day'
         },
@@ -73,7 +73,6 @@ const MainStockChart = () => {
     }
   };
 
-  // Ensure the chart type is 'candlestick'
   return <Chart type='candlestick' options={options} data={data} />;
 };
 
