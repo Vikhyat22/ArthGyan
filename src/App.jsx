@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import { WatchlistProvider } from './contexts/WatchlistContext'; // STEP 1: Import the provider
+import { WatchlistProvider } from './contexts/WatchlistContext';
 import AppLayout from './components/layout/AppLayout';
 import HomePage from './pages/HomePage';
 import WatchlistPage from './pages/WatchlistPage';
@@ -10,8 +10,16 @@ import StockDetailPage from './pages/StockDetailPage';
 function App() {
   return (
     <>
-      <Toaster position="top-center" toastOptions={{ style: { background: '#161b22', color: '#c9d1d9', border: '1px solid #30363d' } }} />
-      {/* STEP 2: Wrap the BrowserRouter with the WatchlistProvider */}
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          style: {
+            background: '#161b22',
+            color: '#c9d1d9',
+            border: '1px solid #3036d',
+          },
+        }}
+      />
       <WatchlistProvider>
         <BrowserRouter>
           <Routes>
@@ -29,3 +37,4 @@ function App() {
 }
 
 export default App;
+
