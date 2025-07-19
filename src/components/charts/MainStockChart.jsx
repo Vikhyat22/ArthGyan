@@ -7,7 +7,7 @@ import {
   LinearScale,
   Tooltip,
   Legend,
-  TimeScale, // This was the missing import
+  TimeScale, // This was the missing  and not found
   TimeSeriesScale, // This was the missing import
 } from 'chart.js';
 import { CandlestickController, CandlestickElement } from 'chartjs-chart-financial';
