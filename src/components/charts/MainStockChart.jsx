@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 import { Chart } from 'react-chartjs-2';
 import {
@@ -8,8 +6,8 @@ import {
   LinearScale,
   Tooltip,
   Legend,
-  TimeScale,
-  TimeSeriesScale,
+  TimeScale, // Import TimeScale
+  TimeSeriesScale // Import TimeSeriesScale
 } from 'chart.js';
 import { CandlestickController, CandlestickElement } from 'chartjs-chart-financial';
 import 'chartjs-adapter-date-fns';
@@ -22,8 +20,8 @@ ChartJS.register(
   Legend,
   CandlestickController,
   CandlestickElement,
-  TimeScale,
-  TimeSeriesScale
+  TimeScale, // Add TimeScale to the registration
+  TimeSeriesScale // Add TimeSeriesScale to the registration
 );
 
 // Create new placeholder data in OHLC format (Open, High, Low, Close)
