@@ -2,25 +2,31 @@ import React, { useState, useEffect } from 'react';
 import FilterChips from '../components/shared/FilterChips';
 import AnnouncementCard from '../components/shared/AnnouncementCard';
 import AnnouncementModal from '../components/shared/AnnouncementModal';
-import { getAnnouncements } from '../services/api'; // Import your new API function
+// We will use the api service you created in the last task
+import { getAnnouncements } from '../services/api';
 
 const HomePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
-  const [announcements, setAnnouncements] = useState([]); // Start with an empty array
-  const [isLoading, setIsLoading] = useState(true); // Add a loading state
+  const [allAnnouncements, setAllAnnouncements] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // useEffect runs after the component mounts
+  // STEP 1: Add state to keep track of the currently selected filter.
+  const [activeFilter, setActiveFilter] = useState('All');
+
   useEffect(() => {
-    // Create an async function inside to fetch data
     const fetchAnnouncements = async () => {
       const data = await getAnnouncements();
-      setAnnouncements(data);
-      setIsLoading(false); // Set loading to false after data is fetched
+      // Add a 'category' to the placeholder data for filtering
+      const dataWithCategory = data.map(item => ({
+        ...item,
+        category: item.summary.includes('profit') ? 'Financial Results' : item.summary.includes('meeting') ? 'Board Meeting' : 'Acquisition'
+      }));
+      setAllAnnouncements(dataWithCategory);
+      setIsLoading(false);
     };
-
     fetchAnnouncements();
-  }, []); // The empty array [] means this effect runs only once
+  }, []);
 
   const handleOpenModal = (announcement) => {
     setSelectedAnnouncement(announcement);
@@ -32,17 +38,29 @@ const HomePage = () => {
     setSelectedAnnouncement(null);
   };
 
+  // STEP 2: Create a new variable that holds the filtered list.
+  // This logic runs every time the component re-renders.
+  const filteredAnnouncements = activeFilter === 'All'
+    ? allAnnouncements
+    : allAnnouncements.filter(announcement => announcement.category === activeFilter);
+
   return (
     <div>
       <h1 className="text-3xl font-bold text-white mb-2">Home Feed</h1>
       <p className="text-gray-400 mb-6">Latest corporate announcements and market news.</p>
-      <FilterChips />
+
+      {/* STEP 3: Pass the state and the function to update it down to the FilterChips component. */}
+      <FilterChips
+        activeFilter={activeFilter}
+        onFilterChange={setActiveFilter}
+      />
 
       {isLoading ? (
         <p className="text-gray-400">Loading announcements...</p>
       ) : (
         <div className="space-y-4">
-          {announcements.map((announcement) => (
+          {/* STEP 4: Map over the NEW filteredAnnouncements variable instead of the full list. */}
+          {filteredAnnouncements.map((announcement) => (
             <div key={announcement.id} onClick={() => handleOpenModal(announcement)}>
               <AnnouncementCard data={announcement} />
             </div>
