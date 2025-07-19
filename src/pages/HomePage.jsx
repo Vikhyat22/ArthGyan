@@ -17,50 +17,23 @@ const HomePage = () => {
     const fetchAnnouncements = async () => {
       setIsLoading(true);
       const data = await getAnnouncements();
-      const announcements = [
-        {
-          id: 1, logo: 'https://placehold.co/40x40/161b22/FFFFFF?text=R', name: 'Reliance Industries', ticker: 'RELIANCE',
-          summary: 'Consolidated net profit rose 15% YoY to ₹18,549 crore. Revenue from operations grew by 12% to ₹2.3 lakh crore, driven by strong performance in Jio and Retail segments.',
-          impact: 'High', // New field
-          timestamp: '2 hours ago',
-          keyTakeaways: [ // New field
-            { icon: <RevenueIcon />, label: 'Revenue', value: '₹2.3L Cr (+12%)' },
-            { icon: <ProfitIcon />, label: 'Net Profit', value: '₹18.5k Cr (+15%)' },
-          ]
-        },
-        {
-          id: 2, logo: 'https://placehold.co/40x40/161b22/FFFFFF?text=TCS', name: 'Tata Consultancy', ticker: 'TCS',
-          summary: 'Company revised its full-year revenue growth guidance downwards to 1-2.5% amidst macroeconomic uncertainties. Deal wins, however, remained strong at $2.1 billion.',
-          impact: 'Medium', // New field
-          timestamp: '8 hours ago',
-          keyTakeaways: [
-            { icon: <RevenueIcon />, label: 'Guidance', value: '1-2.5%' },
-          ]
-        },
-        {
-          id: 3, logo: 'https://placehold.co/40x40/161b22/FFFFFF?text=H', name: 'HDFC Bank', ticker: 'HDFCBANK',
-          summary: 'Board meeting scheduled to consider fundraising up to ₹5,000 crore via issuance of non-convertible debentures (NCDs) for general corporate purposes.',
-          impact: 'Low', // New field
-          timestamp: '1 day ago',
-        },
-      ];
       const dataWithEnhancements = data.map(item => {
-        let impact = 'Low';
-        let keyTakeaways = [];
-        if (item.summary.includes('profit')) {
-          impact = 'High';
-          keyTakeaways.push({ icon: <RevenueIcon />, label: 'Revenue', value: '₹2.3L Cr (+12%)' });
-          keyTakeaways.push({ icon: <ProfitIcon />, label: 'Net Profit', value: '₹18.5k Cr (+15%)' });
-        } else if (item.summary.includes('guidance')) {
-          impact = 'Medium';
-          keyTakeaways.push({ icon: <RevenueIcon />, label: 'Guidance', value: '1-2.5%' });
-        }
-        return {
-          ...item,
-          category: item.summary.includes('profit') ? 'Financial Results' : item.summary.includes('meeting') ? 'Board Meeting' : 'Acquisition',
-          impact,
-          keyTakeaways
-        };
+          let impact = 'Low';
+          let keyTakeaways = [];
+          if (item.summary.includes('profit')) {
+              impact = 'High';
+              keyTakeaways.push({ icon: <RevenueIcon />, label: 'Revenue', value: '₹2.3L Cr (+12%)' });
+              keyTakeaways.push({ icon: <ProfitIcon />, label: 'Net Profit', value: '₹18.5k Cr (+15%)' });
+          } else if (item.summary.includes('guidance')) {
+              impact = 'Medium';
+              keyTakeaways.push({ icon: <RevenueIcon />, label: 'Guidance', value: '1-2.5%' });
+          }
+          return {
+              ...item,
+              category: item.summary.includes('profit') ? 'Financial Results' : item.summary.includes('meeting') ? 'Board Meeting' : 'Acquisition',
+              impact,
+              keyTakeaways
+          };
       });
       setAllAnnouncements(dataWithEnhancements);
       setIsLoading(false);
